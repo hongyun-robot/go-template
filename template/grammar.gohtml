@@ -1,0 +1,37 @@
+{{/* template/grammar */}}
+{{ define "grammar" -}}
+    {{ template "header" . -}}
+    <p>由我来组成身体 {{- .hello -}} 。</p>
+    <p>{{ "pipeline" | printf "%s" }}</p>
+    <p>{{len "pipeline"}}</p>
+
+    <p>
+        {{"\"output\""}}
+        字符串常量
+
+    <p>
+        {{`"output"`}}
+        原始字符串常量
+    </p>
+    <p>
+        {{printf "%q" "output"}}
+        函数调用
+    </p>
+    <p>
+        {{"output" | printf "%q"}}
+        函数调用，最后一个参数来自前一个command的返回值
+    </p>
+    <p>
+        {{printf "%q" (print "out" "put")}}
+        加括号的参数
+    </p>
+    <p>
+        {{"put" | printf "%s%s" "out" | printf "%q"}}
+        玩出花的管道的链式调用
+    </p>
+    <p>
+        {{"output" | printf "%s" | printf "%q"}}
+        管道的链式调用
+    </p>
+    {{- template "footer" . }}
+{{- end }}
