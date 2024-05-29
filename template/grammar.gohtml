@@ -2,36 +2,94 @@
 {{ define "grammar" -}}
     {{ template "header" . -}}
     <p>由我来组成身体 {{- .hello -}} 。</p>
-    <p>{{ "pipeline" | printf "%s" }}</p>
-    <p>{{len "pipeline"}}</p>
-
-    <p>
-        {{"\"output\""}}
-        字符串常量
-
-    <p>
-        {{`"output"`}}
-        原始字符串常量
-    </p>
-    <p>
-        {{printf "%q" "output"}}
-        函数调用
-    </p>
-    <p>
-        {{"output" | printf "%q"}}
-        函数调用，最后一个参数来自前一个command的返回值
-    </p>
-    <p>
-        {{printf "%q" (print "out" "put")}}
-        加括号的参数
-    </p>
-    <p>
-        {{"put" | printf "%s%s" "out" | printf "%q"}}
-        玩出花的管道的链式调用
-    </p>
-    <p>
-        {{"output" | printf "%s" | printf "%q"}}
-        管道的链式调用
-    </p>
+    <details>
+        <summary>管道</summary>
+        <p>{{ "pipeline" | printf "%s" }}</p>
+        <p>{{len "pipeline"}}</p>
+        <p>
+            {{"\"output\""}}
+            字符串常量
+        <p>
+            {{`"output"`}}
+            原始字符串常量
+        </p>
+        <p>
+            {{printf "%q" "output"}}
+            函数调用
+        </p>
+        <p>
+            {{"output" | printf "%q"}}
+            函数调用，最后一个参数来自前一个command的返回值
+        </p>
+        <p>
+            {{printf "%q" (print "out" "put")}}
+            加括号的参数
+        </p>
+        <p>
+            {{"put" | printf "%s%s" "out" | printf "%q"}}
+            玩出花的管道的链式调用
+        </p>
+        <p>
+            {{"output" | printf "%s" | printf "%q"}}
+            管道的链式调用
+        </p>
+    </details>
+    <hr>
+    <details>
+        <summary>变量</summary>
+        {{ range $value, $key := $}}
+            <p>{{$key}} - {{$value}}</p>
+            <p>{{ . }}</p>
+            <p>{{ $ }}</p>
+        {{ end }}
+    </details>
+    <hr>
+    <details>
+        <summary>循环</summary>
+        <details>
+            <summary>map</summary>
+            {{ range $value := .map}}
+                <p>{{$value}}</p>
+                <p>. = {{ . }}</p>
+                <p>$ = {{ $ }}</p>
+            {{ end }}
+            {{ range $key, $value := .map}}
+                <p>{{$key}} - {{$value}}</p>
+            {{ end }}
+        </details>
+        <details>
+            <summary>slice</summary>
+            {{ range $value := .slice}}
+                <p>{{$value}}</p>
+            {{ end }}
+            {{ range $key, $value := .slice}}
+                {{ if eq $key 1 }}
+                    {{ continue }}
+                {{ end }}
+                <p>{{$key}} - {{$value}}</p>
+                <p>. = {{ . }}</p>
+            {{ end }}
+        </details>
+    </details>
+    <hr>
+    <details>
+        <summary>函数</summary>
+        <details>
+            <summary>自定义函数</summary>
+            <p>1 + 2 = {{ add 1 2 }}</p>
+        </details>
+        <details>
+            <summary>内置函数</summary>
+            <p>. length = {{ len . }}</p>
+        </details>
+    </details>
+    <hr>
+    <details open>
+        <summary>block</summary>
+        {{ template "component"}}
+        {{ block "component1" . }}
+            <p>我是 block 默认内容</p>
+        {{ end }}
+    </details>
     {{- template "footer" . }}
 {{- end }}
